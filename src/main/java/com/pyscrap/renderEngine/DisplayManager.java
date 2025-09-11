@@ -1,5 +1,6 @@
 package com.pyscrap.renderEngine;
 
+import com.pyscrap.input.Keyboard;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -13,7 +14,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class DisplayManager {
-    private static final int WIDTH = 1280;
+    private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
 
     // The window handle
@@ -48,9 +49,14 @@ public class DisplayManager {
         // or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             }
         });
+
+        Keyboard keyboard = new Keyboard();
+        GLFW.glfwSetKeyCallback(DisplayManager.getWindow(), keyboard::invoke);
+
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = stackPush()) {
@@ -101,6 +107,10 @@ public class DisplayManager {
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetWindowSize(window, null, h);
         return h.get(0);
+    }
+
+    public static long getWindow() {
+        return window;
     }
 
     public static void closeDisplay() { // <- ❗️ IMPORTANT: This method is now static
