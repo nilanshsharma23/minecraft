@@ -17,13 +17,13 @@ public class Entity {
         this.scale = scale;
     }
 
-    public void increasePosition(float dx, float dy, float dz){
+    public void increasePosition(Float dx, Float dy, Float dz){
         this.position.x += dx;
         this.position.y += dy;
         this.position.z += dz;
     }
 
-    public void increaseRotation(float dx, float dy, float dz){
+    public void increaseRotation(Float dx, Float dy, Float dz){
         this.rotation.x += dx;
         this.rotation.y += dy;
         this.rotation.z += dz;

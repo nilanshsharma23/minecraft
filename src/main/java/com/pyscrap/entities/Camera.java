@@ -11,14 +11,13 @@ public class Camera {
     private float yaw;
     private float roll;
 
-    private float cameraSpeed = 0.02f;
+    private float cameraSpeed = 0.1f;
 
     public Camera() {
         Mouse.createCallbacks();
     }
 
     public void move(){
-        System.out.println(Math.sin(Math.toRadians(yaw)) + " " + Math.cos(Math.toRadians(yaw)));
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_W)) {
             position.z -= cameraSpeed * Math.cos(Math.toRadians(yaw));
             position.x += cameraSpeed * Math.sin(Math.toRadians(yaw));
@@ -40,10 +39,10 @@ public class Camera {
         }
 
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE)) {   // Go up
-            position.y += 0.02f;
+            position.y += cameraSpeed;
         }
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {  // Go down
-            position.y -= 0.02f;
+            position.y -= cameraSpeed;
         }
 
         //System.out.println("DX:" + Mouse.getMouseDX() + "\nDY:" + Mouse.getMouseDY());

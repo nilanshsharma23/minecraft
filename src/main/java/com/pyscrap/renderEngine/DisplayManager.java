@@ -54,7 +54,7 @@ public class DisplayManager {
         });
 
         Keyboard keyboard = new Keyboard();
-        GLFW.glfwSetKeyCallback(DisplayManager.getWindow(), keyboard::invoke);
+        glfwSetKeyCallback(DisplayManager.getWindow(), keyboard::invoke);
 
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 

@@ -3,6 +3,7 @@ package com.pyscrap;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import com.pyscrap.entities.Camera;
+import com.pyscrap.entities.Cube;
 import com.pyscrap.entities.Entity;
 import com.pyscrap.models.RawModel;
 import com.pyscrap.models.TexturedModel;
@@ -11,9 +12,11 @@ import com.pyscrap.renderEngine.Loader;
 import com.pyscrap.renderEngine.Renderer;
 import com.pyscrap.shaders.StaticShader;
 import com.pyscrap.textures.ModelTexture;
+import com.pyscrap.toolbox.Methods;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -24,64 +27,37 @@ public class Main {
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
 
-        float[] vertices = {
-                -0.5f,0.5f,-0.5f,
-                -0.5f,-0.5f,-0.5f,
-                0.5f,-0.5f,-0.5f,
-                0.5f,0.5f,-0.5f,
-
-                -0.5f,0.5f,0.5f,
-                -0.5f,-0.5f,0.5f,
-                0.5f,-0.5f,0.5f,
-                0.5f,0.5f,0.5f,
-
-                0.5f,0.5f,-0.5f,
-                0.5f,-0.5f,-0.5f,
-                0.5f,-0.5f,0.5f,
-                0.5f,0.5f,0.5f,
-
-                -0.5f,0.5f,-0.5f,
-                -0.5f,-0.5f,-0.5f,
-                -0.5f,-0.5f,0.5f,
-                -0.5f,0.5f,0.5f,
-
-                -0.5f,0.5f,0.5f,
-                -0.5f,0.5f,-0.5f,
-                0.5f,0.5f,-0.5f,
-                0.5f,0.5f,0.5f,
-
-                -0.5f,-0.5f,0.5f,
-                -0.5f,-0.5f,-0.5f,
-                0.5f,-0.5f,-0.5f,
-                0.5f,-0.5f,0.5f
-        };
-
         float[] textureCoords = {
 
-                0,0,
-                0,1,
-                1,1,
-                1,0,
-                0,0,
-                0,1,
-                1,1,
-                1,0,
-                0,0,
-                0,1,
-                1,1,
-                1,0,
-                0,0,
-                0,1,
-                1,1,
-                1,0,
-                0,0,
-                0,1,
-                1,1,
-                1,0,
-                0,0,
-                0,1,
-                1,1,
-                1,0
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
+
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
+
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
+
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
+
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
+
+                0f,0f,
+                0f,1f,
+                1f,1f,
+                1f,0f,
         };
 
         int[] indices = {
@@ -100,15 +76,60 @@ public class Main {
         };
 
 
-        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
         ModelTexture texture = new ModelTexture(loader.loadTexture("texture"));
-        TexturedModel texturedModel = new TexturedModel(model, texture);
 
         List<Entity> entities = new ArrayList<>();
+        List<List<List<Boolean>>> existence = new ArrayList<>();
 
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 1; j++) {
-                entities.add(new Entity(texturedModel, new Vector3f(i, 0, j), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
+        int size = 16;
+
+        for (int x = 0; x < size; x++) {
+            existence.add(new ArrayList<>());
+            for (int y = 0; y < size; y++) {
+                existence.get(x).add(new ArrayList<>());
+                for (int z = 0; z < size; z++) {
+                    existence.get(x).get(y).add(true);
+                }
+            }
+        }
+
+        for (int x = 0; x < existence.size(); x++) {
+            for (int y = 0; y < existence.get(x).size(); y++) {
+                for (int z = 0; z < existence.get(x).get(y).size(); z++) {
+                    if (!existence.get(x).get(y).get(z)){
+                        continue;
+                    }
+
+                    List<Float> vertices = new ArrayList<>();
+
+                    if (x - 1 < 0 || !existence.get(x - 1).get(y).get(z)) {
+                        vertices.addAll(Arrays.asList(Cube.negativeXVertices));
+                    }
+
+                    if (x + 1 >= size || !existence.get(x + 1).get(y).get(z)){
+                        vertices.addAll(Arrays.asList(Cube.positiveXVertices));
+                    }
+
+                    if (y - 1 < 0 ||!existence.get(x).get(y - 1).get(z)){
+                        vertices.addAll(Arrays.asList(Cube.negativeYVertices));
+                    }
+
+                    if (y+1 >= size || !existence.get(x).get(y+1).get(z)){
+                        vertices.addAll(Arrays.asList(Cube.positiveYVertices));
+                    }
+
+                    if (z-1 < 0 || !existence.get(x).get(y).get(z-1)){
+                        vertices.addAll(Arrays.asList(Cube.negativeZVertices));
+                    }
+
+                    if (z+1 >= size || !existence.get(x).get(y).get(z+1)){
+                        vertices.addAll(Arrays.asList(Cube.positiveZVertices));
+                    }
+
+                    RawModel model = loader.loadToVAO(Methods.FloatListToArray(vertices), textureCoords, indices);
+                    TexturedModel texturedModel = new TexturedModel(model, texture);
+                    entities.add(new Entity(texturedModel, new Vector3f(x, y, z), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
+                }
             }
         }
 

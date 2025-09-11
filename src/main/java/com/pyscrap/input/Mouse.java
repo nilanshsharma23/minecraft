@@ -6,7 +6,7 @@ import org.lwjgl.glfw.GLFWCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Mouse {
-    private static float mouseX, mouseY, prevMouseX, prevMouseY;
+    private static float mouseX, mouseY, prevMouseX, prevMouseY, deltaTime;
 
     public static void createCallbacks() {
         GLFWCursorPosCallback cursorPosCallback = new GLFWCursorPosCallback() {
