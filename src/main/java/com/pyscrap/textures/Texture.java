@@ -1,13 +1,9 @@
 package com.pyscrap.textures;
 
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-
-import javax.imageio.ImageIO;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -15,21 +11,16 @@ public class Texture {
     private int width, height;
     private int texture;
 
-    public Texture(String path) {
-        texture = load(path);
+    public Texture(BufferedImage atlas, int startX, int startY) {
+        texture = load(atlas, startX, startY);
     }
 
-    private int load(String path) {
+    private int load(BufferedImage atlas, int startX, int startY) {
         int[] pixels = null;
-        try {
-            BufferedImage image = ImageIO.read(new FileInputStream(path));
-            width = image.getWidth();
-            height = image.getHeight();
-            pixels = new int[width * height];
-            image.getRGB(0, 0, width, height, pixels, 0, width);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        width = 16;
+        height = 16;
+        pixels = new int[width * height];
+        atlas.getRGB(startX * width, startY * height, width, height, pixels, 0, width);
 
         int[] data = new int[width * height];
         for (int i = 0; i < width * height; i++) {

@@ -14,8 +14,8 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class DisplayManager {
-    private static final int WIDTH = 720;
-    private static final int HEIGHT = 720;
+    private static final int WIDTH = 1600;
+    private static final int HEIGHT = 900;
 
     // The window handle
     public static long window;
@@ -53,9 +53,9 @@ public class DisplayManager {
             }
         });
 
-        Keyboard keyboard = new Keyboard();
-        glfwSetKeyCallback(DisplayManager.getWindow(), keyboard::invoke);
-
+        try (Keyboard keyboard = new Keyboard()) {
+            glfwSetKeyCallback(DisplayManager.getWindow(), keyboard::invoke);
+        }
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // Get the thread stack and push a new frame
@@ -97,13 +97,13 @@ public class DisplayManager {
         glfwPollEvents();
     }
 
-    public static int getWindowWidth() { // <- ❗️ IMPORTANT: Handy method to get window width
+    public static float getWindowWidth() { // <- ❗️ IMPORTANT: Handy method to get window width
         IntBuffer w = BufferUtils.createIntBuffer(1);
         glfwGetWindowSize(window, w, null);
         return w.get(0);
     }
 
-    public static int getWindowHeight() { // <- ❗️ IMPORTANT: Handy method to get window height
+    public static float getWindowHeight() { // <- ❗️ IMPORTANT: Handy method to get window height
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetWindowSize(window, null, h);
         return h.get(0);

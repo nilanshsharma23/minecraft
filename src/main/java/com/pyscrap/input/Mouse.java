@@ -3,19 +3,29 @@ package com.pyscrap.input;
 import com.pyscrap.renderEngine.DisplayManager;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
-
 public class Mouse {
-    private static float mouseX, mouseY, prevMouseX, prevMouseY, deltaTime;
+    private static float mouseX, mouseY, mouseDX, mouseDY;
+    private static boolean firstMouse = true;
+    private static double lastX, lastY;
 
     public static void createCallbacks() {
         GLFWCursorPosCallback cursorPosCallback = new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
-                prevMouseX = mouseX;
-                prevMouseY = mouseY;
+                if (firstMouse) {
+                    lastX = xpos;
+                    lastY = ypos;
+                    firstMouse = false;
+                }
+
+                mouseDX = (float) (xpos - lastX);
+                mouseDY = (float) (lastY - ypos);
+
                 mouseX = (float) xpos;
-                mouseY = (float)(DisplayManager.getWindowHeight() - ypos);
+                mouseY = (float) ypos;
+
+                lastX = xpos;
+                lastY = ypos;
             }
         };
 
@@ -31,10 +41,15 @@ public class Mouse {
     }
 
     public static float getMouseDX() {
-        return mouseX - prevMouseX;
+        return mouseDX;
     }
 
     public static float getMouseDY() {
-        return mouseY - prevMouseY;
+        return mouseDY;
+    }
+
+    public static void endFrame() {
+        mouseDX = 0;
+        mouseDY = 0;
     }
 }

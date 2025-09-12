@@ -9,15 +9,20 @@ import com.pyscrap.shaders.StaticShader;
 import com.pyscrap.toolbox.Maths;
 import org.joml.Matrix4f;
 
+import java.util.List;
+import java.util.Map;
+
 public class Renderer {
-    private static final float FOV = 70;
+    private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
 
     private Matrix4f projectionMatrix;
+    private StaticShader shader;
 
-    public Renderer(StaticShader shader){
+    public Renderer(StaticShader shader) {
         createProjectionMatrix();
+        this.shader = shader;
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
@@ -29,24 +34,43 @@ public class Renderer {
         glClearColor(0, 1, 1, 1);
     }
 
-    public void render(Entity entity, StaticShader staticShader) {
-        RawModel model = entity.getModel().getRawModel();
-        glBindVertexArray(model.getVaoID());
+    public void render(Map<TexturedModel, List<Entity>> entities) {
+        for (TexturedModel model : entities.keySet()) {
+            prepareTexturedModel(model);
+            List<Entity> batch = entities.get(model);
+
+            for (Entity entity : batch) {
+                prepareInstance(entity);
+                glDrawElements(GL_TRIANGLES, model.getRawModel().getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+
+            unbindTexturedModel();
+        }
+    }
+
+    private void prepareTexturedModel(TexturedModel model) {
+        RawModel rawModel = model.getRawModel();
+        glBindVertexArray(rawModel.getVaoID());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
-        staticShader.loadTransformationMatrix(transformationMatrix);
-
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, entity.getModel().getTexture().getID());
-        glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
+    }
+
+    private void unbindTexturedModel() {
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
     }
 
+    private void prepareInstance(Entity entity) {
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation(),
+                entity.getScale());
+        shader.loadTransformationMatrix(transformationMatrix);
+    }
+
     private void createProjectionMatrix() {
-        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(FOV), 1.0f, NEAR_PLANE, FAR_PLANE);
+        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(FOV),
+                DisplayManager.getWindowWidth() / DisplayManager.getWindowHeight(), NEAR_PLANE, FAR_PLANE);
     }
 }

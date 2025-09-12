@@ -2,6 +2,7 @@ package com.pyscrap.entities;
 
 import com.pyscrap.input.Mouse;
 import com.pyscrap.input.Keyboard;
+
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -11,13 +12,13 @@ public class Camera {
     private float yaw;
     private float roll;
 
-    private float cameraSpeed = 0.1f;
-
     public Camera() {
         Mouse.createCallbacks();
     }
 
-    public void move(){
+    public void move(float deltaTime) {
+        float cameraSpeed = 10f * deltaTime;
+
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_W)) {
             position.z -= cameraSpeed * Math.cos(Math.toRadians(yaw));
             position.x += cameraSpeed * Math.sin(Math.toRadians(yaw));
@@ -38,17 +39,25 @@ public class Camera {
             position.z += cameraSpeed * Math.sin(Math.toRadians(yaw));
         }
 
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE)) {   // Go up
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE)) { // Go up
             position.y += cameraSpeed;
         }
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {  // Go down
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) { // Go down
             position.y -= cameraSpeed;
         }
 
-        //System.out.println("DX:" + Mouse.getMouseDX() + "\nDY:" + Mouse.getMouseDY());
+        yaw += Mouse.getMouseDX() * deltaTime * 10f;
+        pitch -= Mouse.getMouseDY() * deltaTime * 10f;
 
-        yaw += Mouse.getMouseDX() * 0.1f;
-        pitch -= Mouse.getMouseDY() * 0.1f;
+        if (pitch > 90) {
+            pitch = 90;
+        }
+
+        if (pitch < -90) {
+            pitch = -90;
+        }
+
+        Mouse.endFrame();
     }
 
     public Vector3f getPosition() {

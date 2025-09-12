@@ -1,16 +1,34 @@
 package com.pyscrap.renderEngine;
 
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 
 import com.pyscrap.models.RawModel;
 import com.pyscrap.textures.Texture;
 
-import static org.lwjgl.opengl.GL40.*;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Loader {
     private List<Integer> vaos = new ArrayList<Integer>();
@@ -26,10 +44,20 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileName) {
+    public int loadTexture(int startX, int startY) {
+
+        BufferedImage atlas = null;
+        try {
+            atlas = ImageIO.read(new FileInputStream("src/main/java/com/pyscrap/resources/atlas.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Texture texture = null;
         try {
-            texture = new Texture("src/main/java/com/pyscrap/resources/" + fileName + ".png");
+            texture = new Texture(atlas, startX, startY);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
