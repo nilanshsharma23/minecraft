@@ -53,7 +53,7 @@ public class Chunk {
 
                     if (World.getBlockID(xOffsetted, y + 1, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.positiveYVertices));
-                        texture = textures[1];
+                        texture = y <= 2 ? textures[5] : textures[1];
                     }
 
                     if (World.getBlockID(xOffsetted, y - 1, zOffsetted) == 0) {

@@ -31,7 +31,9 @@ public class Main {
         ModelTexture stoneTexture = new ModelTexture(loader.loadTexture(2, 0));
         ModelTexture cobblestoneTexture = new ModelTexture(loader.loadTexture(0, 1));
         ModelTexture coalTexture = new ModelTexture(loader.loadTexture(3, 0));
-        ModelTexture[] textures = { dirtTexture, grassTexture, stoneTexture, cobblestoneTexture, coalTexture };
+        ModelTexture waterTexture = new ModelTexture(loader.loadTexture(1, 1));
+        ModelTexture[] textures = { dirtTexture, grassTexture, stoneTexture, cobblestoneTexture, coalTexture,
+                waterTexture };
         MasterRenderer renderer = new MasterRenderer();
 
         World world = new World(textures, renderer, loader);

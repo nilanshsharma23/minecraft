@@ -29,6 +29,11 @@ public class World {
                                     z * Globals.FREQUENCY)
                                     * 10)
                             + 4;
+
+                    if (y <= 2) {
+                        blockIDs[x][y][z] = 1;
+                        continue;
+                    }
                     blockIDs[x][y][z] = (byte) (noise >= y ? 1 : 0);
                 }
             }
