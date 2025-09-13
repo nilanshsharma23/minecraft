@@ -15,7 +15,7 @@ import java.util.Map;
 public class Renderer {
     private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
-    private static final float FAR_PLANE = 1000f;
+    private static final float FAR_PLANE = 100f;
 
     private Matrix4f projectionMatrix;
     private StaticShader shader;
@@ -30,6 +30,8 @@ public class Renderer {
 
     public void prepare() {
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 1, 1, 1);
     }
