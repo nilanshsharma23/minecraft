@@ -11,17 +11,18 @@ public class Keyboard extends GLFWKeyCallback {
 
     @Override
     public void invoke(long window, int key, int scancode, int action, int mods) {
-        if (key < 0) return;
+        if (key < 0)
+            return;
 
         keyDown[key] = action != GLFW_RELEASE;
         keyPressed[key] = action == GLFW_PRESS;
     }
 
-    public static boolean isKeyDown(int keycode){
+    public static boolean isKeyDown(int keycode) {
         return keyDown[keycode];
     }
 
-    public  static boolean isKeyPressed(int keycode) {
+    public static boolean isKeyPressed(int keycode) {
         return keyPressed[keycode];
     }
 }

@@ -41,7 +41,6 @@ public class Main {
         boolean wireframe = false;
 
         while (!glfwWindowShouldClose(DisplayManager.window)) {
-
             double currentTime = glfwGetTime();
             deltaTime = (float) (currentTime - lastTime);
             lastTime = currentTime;

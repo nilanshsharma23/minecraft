@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Renderer {
-    private static final float FOV = 90;
+    private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 100f;
 
@@ -30,8 +30,7 @@ public class Renderer {
 
     public void prepare() {
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
+        glDepthFunc(GL_LESS);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 1, 1, 1);
     }
