@@ -43,32 +43,28 @@ public class Chunk {
 
                     List<Float> vertices = new ArrayList<>();
 
-                    if (xOffsetted + 1 >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X
-                            || World.getBlockID(xOffsetted + 1, y, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted + 1, y, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.positiveXVertices));
                     }
 
-                    if (xOffsetted - 1 < 0
-                            || World.getBlockID(xOffsetted - 1, y, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted - 1, y, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.negativeXVertices));
                     }
 
-                    if (y + 1 >= Globals.CHUNK_HEIGHT || World.getBlockID(xOffsetted, y + 1, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted, y + 1, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.positiveYVertices));
                         texture = textures[1];
                     }
 
-                    if (y - 1 < 0 || World.getBlockID(xOffsetted, y - 1, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted, y - 1, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.negativeYVertices));
                     }
 
-                    if (zOffsetted + 1 >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z
-                            || World.getBlockID(xOffsetted, y, zOffsetted + 1) == 0) {
+                    if (World.getBlockID(xOffsetted, y, zOffsetted + 1) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.positiveZVertices));
                     }
 
-                    if (zOffsetted - 1 < 0
-                            || World.getBlockID(xOffsetted, y, zOffsetted - 1) == 0) {
+                    if (World.getBlockID(xOffsetted, y, zOffsetted - 1) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.negativeZVertices));
                     }
 

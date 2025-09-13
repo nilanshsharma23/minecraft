@@ -1,7 +1,6 @@
 package com.pyscrap.entities;
 
 import com.pyscrap.input.Mouse;
-import com.pyscrap.terrain.World;
 import com.pyscrap.Globals;
 import com.pyscrap.input.Keyboard;
 
@@ -14,8 +13,6 @@ public class Camera {
     private float pitch;
     private float yaw;
     private float roll;
-
-    Boolean isColliding = false;
 
     public Camera() {
         Mouse.createCallbacks();
@@ -63,21 +60,6 @@ public class Camera {
         }
 
         Mouse.endFrame();
-
-        // int x = (int) Math.floor(position.x);
-        // int y = (int) (Math.floor(position.y));
-        // int z = (int) (Math.floor(position.z));
-
-        // System.out.println(x + " " + y + " " + z);
-
-        // int id = (x + ((int) (y *
-        // Globals.CHUNK_HEIGHT))
-        // + ((int) (z * Globals.CHUNK_LENGTH *
-        // Globals.CHUNK_HEIGHT)));
-
-        // if (World.getBlockID(id) == 1) {
-        // System.out.println(x + " " + y + " " + z);
-        // }
 
     }
 

@@ -12,7 +12,8 @@ import com.pyscrap.toolbox.OpenSimplex2S;
 
 public class World {
 
-    static byte[] blockIDs = new byte[Globals.NO_OF_BLOCKS];
+    static byte[][][] blockIDs = new byte[Globals.CHUNK_LENGTH
+            * Globals.NO_OF_CHUNKS_X][Globals.CHUNK_HEIGHT][Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z];
 
     List<Chunk> chunks = new ArrayList<>();
 
@@ -22,15 +23,13 @@ public class World {
         for (int x = 0; x < Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X; x++) {
             for (int z = 0; z < Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z; z++) {
 
-                double noise = Math
-                        .round(OpenSimplex2S.noise3_ImproveXZ(0, x * Globals.FREQUENCY, z * Globals.FREQUENCY,
-                                0)
-                                * 10)
-                        + 4;
                 for (int y = 0; y < Globals.CHUNK_HEIGHT; y++) {
-                    int id = x + (y * Globals.CHUNK_HEIGHT) + (z * Globals.CHUNK_LENGTH * Globals.CHUNK_HEIGHT);
-
-                    blockIDs[id] = (byte) (noise >= y ? 1 : 0);
+                    double noise = Math
+                            .round(OpenSimplex2S.noise3_ImproveXZ(0, x * Globals.FREQUENCY, y * Globals.FREQUENCY,
+                                    z * Globals.FREQUENCY)
+                                    * 10)
+                            + 4;
+                    blockIDs[x][y][z] = (byte) (noise >= y ? 1 : 0);
                 }
             }
         }
@@ -44,13 +43,14 @@ public class World {
     }
 
     public static byte getBlockID(int x, int y, int z) {
-        int id = x + (y * Globals.CHUNK_HEIGHT)
-                + (z * Globals.CHUNK_LENGTH * Globals.CHUNK_HEIGHT);
-        return blockIDs[id];
-    }
+        if (x < 0 || y < 0 || z < 0)
+            return 1;
 
-    public static byte getBlockID(int id) {
-        return blockIDs[id];
+        if (x >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X || y >= Globals.CHUNK_HEIGHT
+                || z >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z)
+            return 1;
+
+        return blockIDs[x][y][z];
     }
 
     public void render() {
