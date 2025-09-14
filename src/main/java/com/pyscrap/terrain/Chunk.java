@@ -20,25 +20,18 @@ public class Chunk {
 
     MasterRenderer renderer;
 
-    public Chunk(int xoffset, int zoffset, ModelTexture[] textures, MasterRenderer renderer,
+    public Chunk(int xoffset, int zoffset, List<ModelTexture> textures, MasterRenderer renderer,
             Loader loader) {
         this.renderer = renderer;
 
         for (int x = 0; x < Globals.CHUNK_LENGTH; x++) {
             for (int z = 0; z < Globals.CHUNK_LENGTH; z++) {
                 for (int y = 0; y < Globals.CHUNK_HEIGHT; y++) {
-
                     int xOffsetted = x + (xoffset * Globals.CHUNK_LENGTH);
                     int zOffsetted = z + (zoffset * Globals.CHUNK_LENGTH);
 
                     if (World.getBlockID(xOffsetted, y, zOffsetted) == 0) {
                         continue;
-                    }
-
-                    ModelTexture texture = textures[2];
-
-                    if (random.nextInt(10) == 3) {
-                        texture = textures[4];
                     }
 
                     List<Float> vertices = new ArrayList<>();
@@ -53,7 +46,6 @@ public class Chunk {
 
                     if (World.getBlockID(xOffsetted, y + 1, zOffsetted) == 0) {
                         vertices.addAll(Arrays.asList(BlockData.positiveYVertices));
-                        texture = y <= 2 ? textures[5] : textures[1];
                     }
 
                     if (World.getBlockID(xOffsetted, y - 1, zOffsetted) == 0) {
@@ -70,7 +62,8 @@ public class Chunk {
 
                     RawModel model = loader.loadToVAO(Methods.FloatListToArray(vertices), BlockData.textureCoords,
                             BlockData.indices);
-                    TexturedModel texturedModel = new TexturedModel(model, texture);
+                    TexturedModel texturedModel = new TexturedModel(model,
+                            textures.get(World.getBlockID(xOffsetted, y, zOffsetted) - 1));
 
                     blocks.add(new Entity(texturedModel,
                             new Vector3f(xOffsetted, y, zOffsetted),

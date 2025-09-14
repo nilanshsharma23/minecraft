@@ -19,22 +19,29 @@ public class World {
 
     NoiseGenerator noiseGenerator = new NoiseGenerator();
 
-    public World(ModelTexture[] textures, MasterRenderer renderer, Loader loader) {
+    public World(List<ModelTexture> textures, MasterRenderer renderer, Loader loader) {
         for (int x = 0; x < Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X; x++) {
             for (int z = 0; z < Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z; z++) {
-
                 for (int y = 0; y < Globals.CHUNK_HEIGHT; y++) {
                     double noise = Math
-                            .round(OpenSimplex2S.noise3_ImproveXZ(0, x * Globals.FREQUENCY, y * Globals.FREQUENCY,
+                            .floor(OpenSimplex2S.noise3_ImproveXZ(0, x * Globals.FREQUENCY, y * Globals.FREQUENCY,
                                     z * Globals.FREQUENCY)
                                     * 10)
                             + 4;
 
-                    if (y <= 2 && noise < y) {
-                        blockIDs[x][y][z] = 1;
+                    if (y > noise) {
+                        blockIDs[x][y][z] = BlockType.AIR;
                         continue;
                     }
-                    blockIDs[x][y][z] = (byte) (noise >= y ? 1 : 0);
+
+                    if (y == noise) {
+                        blockIDs[x][y][z] = BlockType.GRASS;
+                        continue;
+                    }
+
+                    if (y < (noise - 1)) {
+                        blockIDs[x][y][z] = BlockType.STONE;
+                    }
                 }
             }
         }
@@ -49,11 +56,11 @@ public class World {
 
     public static byte getBlockID(int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0)
-            return 0;
+            return 1;
 
         if (x >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X || y >= Globals.CHUNK_HEIGHT
                 || z >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z)
-            return 0;
+            return 1;
 
         return blockIDs[x][y][z];
     }
