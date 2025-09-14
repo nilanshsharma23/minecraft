@@ -30,7 +30,7 @@ public class World {
                                     * 10)
                             + 4;
 
-                    if (y <= 2) {
+                    if (y <= 2 && noise < y) {
                         blockIDs[x][y][z] = 1;
                         continue;
                     }
@@ -49,11 +49,11 @@ public class World {
 
     public static byte getBlockID(int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0)
-            return 1;
+            return 0;
 
         if (x >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X || y >= Globals.CHUNK_HEIGHT
                 || z >= Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z)
-            return 1;
+            return 0;
 
         return blockIDs[x][y][z];
     }
