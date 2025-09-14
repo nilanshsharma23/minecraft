@@ -1,6 +1,7 @@
 package com.pyscrap.entities;
 
 import com.pyscrap.input.Mouse;
+import com.pyscrap.terrain.World;
 import com.pyscrap.Globals;
 import com.pyscrap.input.Keyboard;
 
@@ -15,12 +16,25 @@ public class Camera {
     private float yaw;
     private float roll;
 
+    boolean positiveXCollision = false;
+    boolean negativeXCollision = false;
+    boolean positiveYCollision = false;
+    boolean negativeYCollision = false;
+    boolean positiveZCollision = false;
+    boolean negativeZCollision = false;
+
     public Camera() {
         Mouse.createCallbacks();
     }
 
     public void move(float deltaTime) {
-        float cameraSpeed = 10f * deltaTime;
+        positiveYCollision = World.getBlockID((int) Math.ceil(position.x), (int) Math.ceil(position.y),
+                (int) position.z) != 0;
+
+        negativeYCollision = World.getBlockID((int) Math.ceil(position.x), (int) Math.ceil(position.y - 2),
+                (int) Math.ceil(position.z)) != 0;
+
+        float cameraSpeed = (negativeYCollision ? 7.5f : 10f) * deltaTime;
 
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_W)) {
             position.z -= cameraSpeed * Math.cos(Math.toRadians(yaw));
@@ -42,10 +56,10 @@ public class Camera {
             position.z += cameraSpeed * Math.sin(Math.toRadians(yaw));
         }
 
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE)) { // Go up
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE) && !positiveYCollision) { // Go up
             position.y += cameraSpeed;
         }
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) { // Go down
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) && !negativeYCollision) { // Go down
             position.y -= cameraSpeed;
         }
 
@@ -61,6 +75,11 @@ public class Camera {
         }
 
         Mouse.endFrame();
+
+        Globals.chunkCoordX = (int) Math.floorDiv((int) position.x, Globals.CHUNK_LENGTH);
+        Globals.chunkCoordZ = (int) Math.floorDiv((int) position.z, Globals.CHUNK_LENGTH);
+
+        // System.out.println(Globals.chunkCoordX + " " + Globals.chunkCoordY);
     }
 
     public Vector3f getPosition() {

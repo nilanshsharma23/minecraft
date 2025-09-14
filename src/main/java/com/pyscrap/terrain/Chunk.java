@@ -19,10 +19,16 @@ public class Chunk {
     Random random = new Random();
 
     MasterRenderer renderer;
+    boolean playerInChunk = false;
+
+    int xoffset;
+    int zoffset;
 
     public Chunk(int xoffset, int zoffset, List<ModelTexture> textures, MasterRenderer renderer,
             Loader loader) {
         this.renderer = renderer;
+        this.xoffset = xoffset;
+        this.zoffset = zoffset;
 
         for (int x = 0; x < Globals.CHUNK_LENGTH; x++) {
             for (int z = 0; z < Globals.CHUNK_LENGTH; z++) {
@@ -83,8 +89,13 @@ public class Chunk {
     }
 
     public void render() {
-        for (Entity block : blocks) {
-            renderer.processEntity(block);
+        playerInChunk = (Globals.chunkCoordX <= xoffset + 1 && Globals.chunkCoordX >= xoffset - 1)
+                & (Globals.chunkCoordZ <= zoffset + 1 && Globals.chunkCoordZ >= zoffset - 1);
+
+        if (playerInChunk) {
+            for (Entity block : blocks) {
+                renderer.processEntity(block);
+            }
         }
     }
 }
