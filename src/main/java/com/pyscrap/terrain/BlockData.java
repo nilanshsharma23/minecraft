@@ -2,78 +2,92 @@ package com.pyscrap.terrain;
 
 public class BlockData {
 
-        public static Float[] positiveXVertices = { 0.5f, 0.5f, -0.5f,
+        public static Float[] positiveXVertices = { 0.5f, -0.5f, 0.5f,
                         0.5f, -0.5f, -0.5f,
-                        0.5f, -0.5f, 0.5f,
-                        0.5f, 0.5f, 0.5f, };
-
-        public static Float[] negativeXVertices = { -0.5f, 0.5f, -0.5f,
-                        -0.5f, -0.5f, -0.5f,
-                        -0.5f, -0.5f, 0.5f,
-                        -0.5f, 0.5f, 0.5f, };
-
-        public static Float[] positiveYVertices = { -0.5f, 0.5f, 0.5f,
-                        -0.5f, 0.5f, -0.5f,
                         0.5f, 0.5f, -0.5f,
                         0.5f, 0.5f, 0.5f, };
+
+        public static Float[] positiveXTextureCoords = { 0.0f, 0.0f,
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f, };
+
+        public static Float[] negativeXVertices = { -0.5f, -0.5f, 0.5f,
+                        -0.5f, 0.5f, 0.5f,
+                        -0.5f, 0.5f, -0.5f,
+                        -0.5f, -0.5f, -0.5f,
+        };
+
+        public static Float[] negativeXTextureCoords = {
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f,
+                        0.0f, 0.0f, };
+
+        public static Float[] positiveYVertices = { -0.5f, 0.5f, 0.5f,
+                        0.5f, 0.5f, 0.5f,
+                        0.5f, 0.5f, -0.5f,
+                        -0.5f, 0.5f, -0.5f, };
+
+        public static Float[] positiveYTextureCoords = { 0.0f, 0.0f,
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f, };
 
         public static Float[] negativeYVertices = { -0.5f, -0.5f, 0.5f,
                         -0.5f, -0.5f, -0.5f,
                         0.5f, -0.5f, -0.5f,
                         0.5f, -0.5f, 0.5f };
 
-        public static Float[] positiveZVertices = { -0.5f, 0.5f, 0.5f,
-                        -0.5f, -0.5f, 0.5f,
-                        0.5f, -0.5f, 0.5f,
-                        0.5f, 0.5f, 0.5f, };
+        public static Float[] negativeYTextureCoords = { 0.0f, 0.0f,
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f, };
 
-        public static Float[] negativeZVertices = { -0.5f, 0.5f, -0.5f,
-                        -0.5f, -0.5f, -0.5f,
-                        0.5f, -0.5f, -0.5f,
-                        0.5f, 0.5f, -0.5f, };
+        public static Float[] positiveZVertices = { -0.5f, -0.5f, 0.5f,
+                        0.5f, -0.5f, 0.5f,
+                        0.5f, 0.5f, 0.5f,
+                        -0.5f, 0.5f, 0.5f, };
+
+        public static Float[] positiveZTextureCoords = {
+                        0.0f, 0.0f,
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f, };
+
+        public static Float[] negativeZVertices = { -0.5f, -0.5f, -0.5f,
+                        -0.5f, 0.5f, -0.5f,
+                        0.5f, 0.5f, -0.5f,
+                        0.5f, -0.5f, -0.5f, };
+
+        public static Float[] negativeZTextureCoords = {
+                        1.0f, 0.0f,
+                        1.0f, 1.0f,
+                        0.0f, 1.0f,
+                        0.0f, 0.0f, };
 
         public static int[] indices = {
-                        0, 1, 3,
-                        3, 1, 2,
-                        4, 5, 7,
-                        7, 5, 6,
-                        8, 9, 11,
-                        11, 9, 10,
-                        12, 13, 15,
-                        15, 13, 14,
-                        16, 17, 19,
-                        19, 17, 18,
-                        20, 21, 23,
-                        23, 21, 22 };
+                        0, 1, 2,
+                        2, 3, 0,
 
-        public static float[] textureCoords = {
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
+                        // Back Face (using vertices 4-7)
+                        4, 5, 6,
+                        6, 7, 4,
 
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
+                        // Right Face (using vertices 8-11)
+                        8, 9, 10,
+                        10, 11, 8,
 
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
+                        // Left Face (using vertices 12-15)
+                        12, 13, 14,
+                        14, 15, 12,
 
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
+                        // Top Face (using vertices 16-19)
+                        16, 17, 18,
+                        18, 19, 16,
 
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
+                        // Bottom Face (using vertices 20-23)
+                        20, 21, 22,
+                        22, 23, 20 };
 
-                        0f, 0f,
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f, };
 }

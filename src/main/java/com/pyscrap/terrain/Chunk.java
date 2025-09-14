@@ -30,37 +30,45 @@ public class Chunk {
                     int xOffsetted = x + (xoffset * Globals.CHUNK_LENGTH);
                     int zOffsetted = z + (zoffset * Globals.CHUNK_LENGTH);
 
-                    if (World.getBlockID(xOffsetted, y, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted, y, zOffsetted) == BlockType.AIR) {
                         continue;
                     }
 
                     List<Float> vertices = new ArrayList<>();
+                    List<Float> textureCoords = new ArrayList<>();
 
-                    if (World.getBlockID(xOffsetted + 1, y, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted + 1, y, zOffsetted) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.positiveXVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.positiveXTextureCoords));
                     }
 
-                    if (World.getBlockID(xOffsetted - 1, y, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted - 1, y, zOffsetted) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.negativeXVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.negativeXTextureCoords));
                     }
 
-                    if (World.getBlockID(xOffsetted, y + 1, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted, y + 1, zOffsetted) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.positiveYVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.positiveYTextureCoords));
                     }
 
-                    if (World.getBlockID(xOffsetted, y - 1, zOffsetted) == 0) {
+                    if (World.getBlockID(xOffsetted, y - 1, zOffsetted) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.negativeYVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.negativeYTextureCoords));
                     }
 
-                    if (World.getBlockID(xOffsetted, y, zOffsetted + 1) == 0) {
+                    if (World.getBlockID(xOffsetted, y, zOffsetted + 1) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.positiveZVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.positiveZTextureCoords));
                     }
 
-                    if (World.getBlockID(xOffsetted, y, zOffsetted - 1) == 0) {
+                    if (World.getBlockID(xOffsetted, y, zOffsetted - 1) == BlockType.AIR) {
                         vertices.addAll(Arrays.asList(BlockData.negativeZVertices));
+                        textureCoords.addAll(Arrays.asList(BlockData.negativeZTextureCoords));
                     }
 
-                    RawModel model = loader.loadToVAO(Methods.FloatListToArray(vertices), BlockData.textureCoords,
+                    RawModel model = loader.loadToVAO(Methods.FloatListToArray(vertices),
+                            Methods.FloatListToArray(textureCoords),
                             BlockData.indices);
                     TexturedModel texturedModel = new TexturedModel(model,
                             textures.get(World.getBlockID(xOffsetted, y, zOffsetted) - 1));

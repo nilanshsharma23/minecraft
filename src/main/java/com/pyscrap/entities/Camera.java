@@ -1,16 +1,16 @@
 package com.pyscrap.entities;
 
 import com.pyscrap.input.Mouse;
+import com.pyscrap.Globals;
 import com.pyscrap.input.Keyboard;
 
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 public class Camera {
-    private Vector3f position = new Vector3f(0, 0, 0);
+    private Vector3f position = new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 16,
+            (Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z) / 2);
 
-    // new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 16,
-    // (Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z) / 2);
     private float pitch;
     private float yaw;
     private float roll;
