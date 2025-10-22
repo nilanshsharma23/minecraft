@@ -35,14 +35,7 @@ public class World {
                         continue;
                     }
 
-                    if (y == noise) {
-                        blockIDs[x][y][z] = BlockType.GRASS;
-                        continue;
-                    }
-
-                    if (y < noise) {
-                        blockIDs[x][y][z] = BlockType.DIRT;
-                    }
+                    blockIDs[x][y][z] = BlockType.STONE;
                 }
             }
         }

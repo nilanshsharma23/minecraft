@@ -9,12 +9,13 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 public class Camera {
-    private Vector3f position = new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 16,
+    private Vector3f position = new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 300,
             (Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z) / 2);
 
     private float pitch;
     private float yaw;
     private float roll;
+    private float gravity = 0.2f;
 
     boolean positiveXCollision = false;
     boolean negativeXCollision = false;
@@ -59,6 +60,7 @@ public class Camera {
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE) && !positiveYCollision) { // Go up
             position.y += cameraSpeed;
         }
+
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) && !negativeYCollision) { // Go down
             position.y -= cameraSpeed;
         }
@@ -80,6 +82,13 @@ public class Camera {
         Globals.chunkCoordZ = (int) Math.floorDiv((int) position.z, Globals.CHUNK_LENGTH);
 
         // System.out.println(Globals.chunkCoordX + " " + Globals.chunkCoordY);
+
+        if (!negativeYCollision) {
+            position.y -= gravity;
+            gravity += 0.1f;
+        } else {
+            gravity = 0.2f;
+        }
     }
 
     public Vector3f getPosition() {
