@@ -62,6 +62,8 @@ public class Main {
 
             renderer.render(camera);
 
+            System.out.println(camera.getPosition().x + " " + camera.getPosition().y);
+
             shader.stop();
             DisplayManager.updateDisplay();
         }

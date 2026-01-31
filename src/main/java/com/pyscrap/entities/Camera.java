@@ -1,7 +1,6 @@
 package com.pyscrap.entities;
 
 import com.pyscrap.input.Mouse;
-import com.pyscrap.terrain.World;
 import com.pyscrap.Globals;
 import com.pyscrap.input.Keyboard;
 
@@ -9,33 +8,21 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 public class Camera {
-    private Vector3f position = new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 300,
+    private Vector3f position = new Vector3f((Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_X) / 2, 20,
             (Globals.CHUNK_LENGTH * Globals.NO_OF_CHUNKS_Z) / 2);
 
     private float pitch;
     private float yaw;
     private float roll;
-    private float gravity = 0.2f;
 
-    boolean positiveXCollision = false;
-    boolean negativeXCollision = false;
-    boolean positiveYCollision = false;
-    boolean negativeYCollision = false;
-    boolean positiveZCollision = false;
-    boolean negativeZCollision = false;
 
     public Camera() {
         Mouse.createCallbacks();
     }
 
     public void move(float deltaTime) {
-        positiveYCollision = World.getBlockID((int) Math.ceil(position.x), (int) Math.ceil(position.y),
-                (int) position.z) != 0;
 
-        negativeYCollision = World.getBlockID((int) Math.ceil(position.x), (int) Math.ceil(position.y - 2),
-                (int) Math.ceil(position.z)) != 0;
-
-        float cameraSpeed = (negativeYCollision ? 7.5f : 10f) * deltaTime;
+        float cameraSpeed = 10f * deltaTime;
 
         if (Keyboard.isKeyDown(GLFW.GLFW_KEY_W)) {
             position.z -= cameraSpeed * Math.cos(Math.toRadians(yaw));
@@ -56,12 +43,12 @@ public class Camera {
             position.x += cameraSpeed * Math.cos(Math.toRadians(yaw));
             position.z += cameraSpeed * Math.sin(Math.toRadians(yaw));
         }
-
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE) && !positiveYCollision) { // Go up
+        
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_SPACE)) { // Go up
             position.y += cameraSpeed;
         }
 
-        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) && !negativeYCollision) { // Go down
+        if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) { // Go down
             position.y -= cameraSpeed;
         }
 
@@ -82,13 +69,6 @@ public class Camera {
         Globals.chunkCoordZ = (int) Math.floorDiv((int) position.z, Globals.CHUNK_LENGTH);
 
         // System.out.println(Globals.chunkCoordX + " " + Globals.chunkCoordY);
-
-        if (!negativeYCollision) {
-            position.y -= gravity;
-            gravity += 0.1f;
-        } else {
-            gravity = 0.2f;
-        }
     }
 
     public Vector3f getPosition() {

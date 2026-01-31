@@ -2,6 +2,7 @@ package com.pyscrap.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.pyscrap.Globals;
 import com.pyscrap.renderEngine.Loader;
@@ -31,7 +32,28 @@ public class World {
                                     * 10)
                             + 5;
                     if (y > noise) {
-                        blockIDs[x][y][z] = BlockType.AIR;
+                        if (y != 1) {
+                            blockIDs[x][y][z] = BlockType.AIR;
+                        } else {
+                            blockIDs[x][y][z] = BlockType.WATER;
+                        }
+                        continue;
+                    }
+
+                    if (y > noise - 1) {
+                        blockIDs[x][y][z] = BlockType.GRASS;
+                        continue;
+                    }
+
+                    if (y > noise - 2) {
+                        blockIDs[x][y][z] = BlockType.DIRT;
+                        continue;
+                    }
+
+                    Random random = new Random();
+
+                    if (random.nextInt(10) == 2) {
+                        blockIDs[x][y][z] = BlockType.COAL;
                         continue;
                     }
 
